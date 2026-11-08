@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import api from "../api/axios";
-
+import { Pencil, Trash2 } from "lucide-react";
 const money = (n) => "Rs " + Number(n || 0).toLocaleString();
 const empty = { name: "", sku: "", category: "", costPrice: "", salePrice: "", stock: "", lowStockThreshold: 5 };
 
@@ -16,18 +16,24 @@ export default function Products() {
   const [form, setForm] = useState(empty);
   const [editingId, setEditingId] = useState(null);
   const [showForm, setShowForm] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
   const limit = 10;
   const totalPages = Math.max(1, Math.ceil(total / limit));
 
-  const load = async () => {
+ const load = async () => {
+  setLoading(true);
+  try {
     const res = await api.get("/products", {
       params: { search, page, limit, lowStock: lowOnly || undefined },
     });
     setProducts(res.data.products);
     setTotal(res.data.total);
-  };
+  } finally {
+    setLoading(false);
+  }
+};
 
   useEffect(() => {
     load();
@@ -115,13 +121,16 @@ export default function Products() {
             </tr>
           </thead>
           <tbody>
-            {products.length === 0 && (
-              <tr><td colSpan="6" className="p-6 text-center text-cream/60">No products found.</td></tr>
-            )}
-            {products.map((p) => {
+           {loading && (
+  <tr><td colSpan="6" className="p-6 text-center text-cream/60">Loading...</td></tr>
+)}
+{!loading && products.length === 0 && (
+  <tr><td colSpan="6" className="p-6 text-center text-cream/60">No products found.</td></tr>
+)}
+           {!loading && products.map((p) => {
               const low = p.stock <= p.lowStockThreshold;
               return (
-                <tr key={p._id} className="border-t border-cream/10">
+             <tr key={p._id} className="border-t border-cream/10 transition hover:bg-cream/5">
                   <td className="p-4">
                     {p.name}
                     {p.sku && <span className="ml-2 text-xs text-cream/40">{p.sku}</span>}
@@ -134,10 +143,26 @@ export default function Products() {
                       {p.stock}
                     </span>
                   </td>
-                  <td className="space-x-3 pr-4 text-right">
-                    <button onClick={() => openEdit(p)} className="text-cream/70 hover:text-coral">Edit</button>
-                    <button onClick={() => handleDelete(p._id)} className="text-cream/70 hover:text-coral">Delete</button>
-                  </td>
+                <td className="pr-4">
+  <div className="flex justify-end gap-1">
+    <button
+      onClick={() => openEdit(p)}
+      title="Edit"
+      aria-label="Edit product"
+      className="rounded-lg p-2 text-cream/50 transition hover:bg-cream/10 hover:text-cream"
+    >
+      <Pencil size={16} />
+    </button>
+    <button
+      onClick={() => handleDelete(p._id)}
+      title="Delete"
+      aria-label="Delete product"
+      className="rounded-lg p-2 text-cream/50 transition hover:bg-red-500/15 hover:text-red-400"
+    >
+      <Trash2 size={16} />
+    </button>
+  </div>
+</td>
                 </tr>
               );
             })}

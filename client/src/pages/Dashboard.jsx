@@ -68,7 +68,7 @@ export default function Dashboard() {
     );
   }, [days]);
 
-  if (!summary) return <p>Loading...</p>;
+ if (!summary) return <p className="text-cream/60">Loading...</p>;
 
   const stats = [
     { label: "Today's sales", value: money(summary.sales) },

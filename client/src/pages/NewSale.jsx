@@ -14,12 +14,15 @@ export default function NewSale() {
   const [payment, setPayment] = useState("cash");
   const [error, setError] = useState("");
   const [saving, setSaving] = useState(false);
+  const [loadingProducts, setLoadingProducts] = useState(true);
 
   // load products matching the search (limit 50 is enough for picking)
   useEffect(() => {
+    setLoadingProducts(true);
     api
       .get("/products", { params: { search, limit: 50 } })
-      .then((res) => setProducts(res.data.products));
+      .then((res) => setProducts(res.data.products))
+      .finally(() => setLoadingProducts(false));
   }, [search]);
 
   const qtyInCart = (id) => cart.find((c) => c.product._id === id)?.qty || 0;
@@ -30,21 +33,22 @@ export default function NewSale() {
       const found = prev.find((c) => c.product._id === p._id);
       if (found)
         return prev.map((c) =>
-          c.product._id === p._id ? { ...c, qty: c.qty + 1 } : c
+          c.product._id === p._id ? { ...c, qty: c.qty + 1 } : c,
         );
       return [...prev, { product: p, qty: 1 }];
     });
   };
 
   const changeQty = (id, qty) => {
-    setCart((prev) =>
-      prev
-        .map((c) =>
-          c.product._id === id
-            ? { ...c, qty: Math.min(Math.max(qty, 0), c.product.stock) }
-            : c
-        )
-        .filter((c) => c.qty > 0) // qty 0 removes the item
+    setCart(
+      (prev) =>
+        prev
+          .map((c) =>
+            c.product._id === id
+              ? { ...c, qty: Math.min(Math.max(qty, 0), c.product.stock) }
+              : c,
+          )
+          .filter((c) => c.qty > 0), // qty 0 removes the item
     );
   };
 
@@ -91,13 +95,16 @@ export default function NewSale() {
                 >
                   <p className="font-semibold">{p.name}</p>
                   <p className="text-sm text-cream/60">{money(p.salePrice)}</p>
-                  <p className={`mt-1 text-xs ${p.stock <= p.lowStockThreshold ? "text-coral" : "text-cream/50"}`}>
+                  <p
+                    className={`mt-1 text-xs ${p.stock <= p.lowStockThreshold ? "text-coral" : "text-cream/50"}`}
+                  >
                     {out ? "Out of stock" : `${p.stock} in stock`}
                   </p>
                 </button>
               );
             })}
-            {products.length === 0 && (
+            {loadingProducts && <p className="text-cream/60">Loading...</p>}
+            {!loadingProducts && products.length === 0 && (
               <p className="text-cream/60">No products found.</p>
             )}
           </div>
@@ -113,14 +120,19 @@ export default function NewSale() {
 
           <ul className="space-y-3">
             {cart.map((c) => (
-              <li key={c.product._id} className="flex items-center gap-2 text-sm">
+              <li
+                key={c.product._id}
+                className="flex items-center gap-2 text-sm"
+              >
                 <span className="flex-1 truncate">{c.product.name}</span>
                 <input
                   type="number"
                   min="0"
                   max={c.product.stock}
                   value={c.qty}
-                  onChange={(e) => changeQty(c.product._id, Number(e.target.value))}
+                  onChange={(e) =>
+                    changeQty(c.product._id, Number(e.target.value))
+                  }
                   className={input + " w-16 py-1"}
                 />
                 <span className="w-20 text-right">
@@ -146,7 +158,9 @@ export default function NewSale() {
           </select>
 
           {error && (
-            <p className="rounded-lg bg-coral/15 p-2 text-sm text-coral">{error}</p>
+            <p className="rounded-lg bg-coral/15 p-2 text-sm text-coral">
+              {error}
+            </p>
           )}
 
           <button

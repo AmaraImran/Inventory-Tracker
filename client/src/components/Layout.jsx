@@ -5,6 +5,7 @@ const links = [
   { to: "/", label: "Dashboard" },
   { to: "/products", label: "Products" },
   { to: "/sales/new", label: "New Sale" },
+  { to: "/sales", label: "Sales" },
 ];
 
 export default function Layout() {
@@ -20,7 +21,7 @@ export default function Layout() {
               <NavLink
                 key={l.to}
                 to={l.to}
-                end={l.to === "/"}
+               end={l.to === "/" || l.to === "/sales"}
                 className={({ isActive }) =>
                   `rounded-lg px-3 py-2 ${
                     isActive ? "bg-coral text-white" : "text-cream/70 hover:bg-cream/10"

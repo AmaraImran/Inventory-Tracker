@@ -6,6 +6,7 @@ import Layout from "./components/Layout";
 import Dashboard from "./pages/Dashboard";
 import Products from "./pages/Products";
 import NewSale from "./pages/NewSale";
+import Sales from "./pages/Sales";
 
 export default function App() {
   return (
@@ -19,6 +20,7 @@ export default function App() {
 <Route path="/" element={<Dashboard />} />
 <Route path="/products" element={<Products />} />
 <Route path="/sales/new" element={<NewSale />} />
+<Route path="/sales" element={<Sales />} />
      
         
         </Route>
