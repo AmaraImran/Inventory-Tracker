@@ -6,7 +6,15 @@ import productRoutes from "./routes/Product.js";
 import saleRoutes from "./routes/sales.js";
 import statsRoutes from "./routes/stats.js";
 const app = express();
-
+app.use((req, _res, next) => {
+  const u = new URL(req.url, "http://x");
+  const p = u.searchParams.get("p");
+  if (p !== null) {
+    u.searchParams.delete("p");
+    req.url = "/" + p + u.search; // restore the real path and keep other query params
+  }
+  next();
+});
 app.use(cors({ origin: process.env.CLIENT_URL }));
 app.use(express.json());
 
