@@ -2,7 +2,7 @@
 
 A full-stack MERN app for small shops to manage products, record sales, and see daily profit at a glance. Stock is deducted automatically on every sale, and the dashboard is built from MongoDB aggregations.
 
-**Live demo:** https://YOUR-CLIENT-URL.vercel.app
+**Live demo:** https://inventory-tracker-gkyz.vercel.app/
 **API:** https://inventory-tracker-eight-tau.vercel.app/api/health
 
 **Demo login**
