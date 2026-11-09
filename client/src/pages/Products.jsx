@@ -149,7 +149,7 @@ export default function Products() {
       onClick={() => openEdit(p)}
       title="Edit"
       aria-label="Edit product"
-      className="rounded-lg p-2 text-cream/50 transition hover:bg-cream/10 hover:text-cream"
+      className="rounded-lg p-2 text-cream/50 transition hover:bg-cream/10 hover:text-cream bg-card"
     >
       <Pencil size={16} />
     </button>
@@ -157,7 +157,7 @@ export default function Products() {
       onClick={() => handleDelete(p._id)}
       title="Delete"
       aria-label="Delete product"
-      className="rounded-lg p-2 text-cream/50 transition hover:bg-red-500/15 hover:text-red-400"
+      className="rounded-lg p-2 text-cream/50 transition hover:bg-red-500/15 hover:text-red-600 bg-card"
     >
       <Trash2 size={16} />
     </button>

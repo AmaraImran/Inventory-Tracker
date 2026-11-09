@@ -1,10 +1,14 @@
 @import "tailwindcss";
 
 @theme {
-  --color-navy: #14213d;
+  --color-navy: #0f1a33;      /* page background, slightly deeper */
   --color-cream: #f4ede0;
   --color-coral: #ff6b5b;
+  --color-card: #233459;      /* cards, lighter than the page */
+  --color-card-hover: #2c4070;
+  --color-sky: #bcd0ee;
 }
+
 @layer components {
   /* all your old CSS goes inside here */
 

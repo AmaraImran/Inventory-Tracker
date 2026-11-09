@@ -82,12 +82,12 @@ export default function Dashboard() {
       <h1 className="text-3xl font-semibold">Overview</h1>
 
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-        {stats.map((s) => (
-          <Card key={s.label}>
-            <p className="text-sm text-cream/60">{s.label}</p>
-            <p className={`mt-1 text-2xl font-semibold ${s.warn ? "text-coral" : ""}`}>{s.value}</p>
-          </Card>
-        ))}
+       {stats.map((s) => (
+  <div key={s.label} className="rounded-2xl bg-sky p-5 text-navy">
+    <p className="text-sm text-navy/60">{s.label}</p>
+    <p className={`mt-1 text-2xl font-semibold ${s.warn ? "text-coral" : ""}`}>{s.value}</p>
+  </div>
+))}
       </div>
 
       <div className="grid gap-6 lg:grid-cols-3">
